@@ -8,19 +8,34 @@
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
-        }
-        .padding()
-    }
-}
+    @State private var selectedCategory = "All"
+    let recipeCategories = ["All", "Category1", "Category2", "Category3"]
+    @State private var navigateToRecipeList = false
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
+    var body: some View {
+        NavigationView {
+            VStack {
+                Picker("Select a category", selection: $selectedCategory) {
+                    ForEach(recipeCategories, id: \.self) { category in
+                        Text(category)
+                    }
+                }
+                .pickerStyle(MenuPickerStyle())
+                .padding()
+
+                Button(action: {
+                    // Set navigateToRecipeList to true to trigger navigation
+                    navigateToRecipeList = true
+                }) {
+                    Text("Show Recipes")
+                }
+            }
+            .navigationTitle("Recipe Categories")
+            .background(
+                NavigationLink(destination: RecipeListView(selectedCategory: selectedCategory), isActive: $navigateToRecipeList) {
+                    EmptyView()
+                }
+            )
+        }
     }
 }
