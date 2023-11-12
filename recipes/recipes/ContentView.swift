@@ -32,30 +32,33 @@ struct ContentView: View {
     @State private var navigateToRecipeList = false
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 Text("Recipe Generator").font(.largeTitle).bold()
+                Spacer()
+                Text("Choose Category")
                 Picker("Select a category", selection: $selectedCategory) {
                     ForEach(recipeCategories, id: \.self) { category in
                         Text(category)
                     }
                 }
-                .pickerStyle(MenuPickerStyle())
+                .pickerStyle(InlinePickerStyle())
                 .padding()
 
-                Button(action: {
-                    // Set navigateToRecipeList to true to trigger navigation
-                    navigateToRecipeList = true
-                }) {
-                    Text("Show Recipes")
-                }
+                NavigationLink("Generate Recipe's", destination: RecipeListView(selectedCategory: selectedCategory))
+                    .padding(.all, 6.0)
+                    
+                    .cornerRadius(20)
+                    .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                Spacer()
             }
-            //.navigationTitle("Recipe Categories")
-            .background(
-                NavigationLink(destination: RecipeListView(selectedCategory: selectedCategory), isActive: $navigateToRecipeList) {
-                    EmptyView()
-                }
-            )
         }
+    }
+}
+
+
+struct Previews_ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
     }
 }
