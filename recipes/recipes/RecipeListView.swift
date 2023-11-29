@@ -11,23 +11,53 @@ struct RecipeListView: View {
     let selectedCategory: String // Pass the selected category as a parameter
     
     @State private var randomMeals: [Meal] = [] // Store the fetched meals here
+    @State private var isShowingDetails = false
+    @State private var selectedMeal: Meal?
 
     var body: some View {
-        // Display the list of recipes for the selected category
-        // You can filter your recipe data based on the category here.
-
-        Button(action: {
-            APIManager.fetchRandomMeal { result in
-                switch result {
-                case .success(let meals):
-                    randomMeals = meals
-                    print(meals)
-                case .failure(let error):
-                    print("Error: \(error)")
+        NavigationStack {
+            List(randomMeals, id: \.idMeal) { meal in
+                NavigationLink(destination: MealDetailView(meal: meal), isActive: $isShowingDetails) {
+                    EmptyView()
                 }
+                .hidden() // Hidden link to trigger navigation programmatically
+                
+                Text(meal.strMeal)
+                    .onTapGesture {
+                        selectedMeal = meal
+                        isShowingDetails.toggle()
+                    }
             }
-        }) {
-            Text("Fetch Random Meal")
+            .navigationTitle("Recipe List")
+        }
+        .onAppear {
+            fetchRandomMeal()
+        }
+    }
+    
+    private func fetchRandomMeal() {
+        APIManager.fetchRandomMeal { result in
+            switch result {
+            case .success(let meals):
+                randomMeals = meals
+            case .failure(let error):
+                print("Error: \(error)")
+            }
         }
     }
 }
+
+struct MealDetailView: View {
+    let meal: Meal
+    
+    var body: some View {
+        VStack {
+            Text("Meal: \(meal.strMeal)")
+            Text("Category: \(meal.strCategory)")
+            Text("Area: \(meal.strArea)")
+            // Add more details as needed
+        }
+        .navigationTitle("Meal Details")
+    }
+}
+

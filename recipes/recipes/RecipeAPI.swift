@@ -14,7 +14,43 @@ struct MealResponse: Codable {
 struct Meal: Codable {
     let idMeal: String
     let strMeal: String
-    // Add more properties as needed
+    let strCategory: String
+    let strArea: String
+    let strInstructions: String
+    let strMealThumb: String
+    let strYoutube: String
+    
+    var ingredients: [String] {
+        var result = [String]()
+        for i in 1...20 {
+            let key = "strIngredient\(i)"
+            if let ingredient = getValue(forKey: key) {
+                result.append(ingredient)
+            }
+        }
+        return result
+    }
+
+    var measures: [String] {
+        var result = [String]()
+        for i in 1...20 {
+            let key = "strMeasure\(i)"
+            if let measure = getValue(forKey: key) {
+                result.append(measure)
+            }
+        }
+        return result
+    }
+
+    private func getValue(forKey key: String) -> String? {
+        let mirror = Mirror(reflecting: self)
+        for child in mirror.children {
+            if let label = child.label, label == key, let value = child.value as? String, !value.isEmpty {
+                return value
+            }
+        }
+        return nil
+    }
 }
 
 class APIManager {
