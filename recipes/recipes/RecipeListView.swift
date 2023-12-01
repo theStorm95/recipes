@@ -17,16 +17,15 @@ struct RecipeListView: View {
     var body: some View {
         NavigationStack {
             List(randomMeals, id: \.idMeal) { meal in
-                NavigationLink(destination: MealDetailView(meal: meal), isActive: $isShowingDetails) {
-                    EmptyView()
+                NavigationLink {
+                    MealDetailView(meal: meal)
+                } label: {
+                    Text(meal.strMeal)
+                        .onTapGesture {
+                            selectedMeal = meal
+                            isShowingDetails.toggle()
+                        }
                 }
-                .hidden() // Hidden link to trigger navigation programmatically
-                
-                Text(meal.strMeal)
-                    .onTapGesture {
-                        selectedMeal = meal
-                        isShowingDetails.toggle()
-                    }
             }
             .navigationTitle("Recipe List")
         }

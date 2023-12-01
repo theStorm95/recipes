@@ -11,6 +11,14 @@ struct MealResponse: Codable {
     let meals: [Meal]
 }
 
+struct CatagoryResponse: Codable {
+    let catagories: [Catagory]
+}
+
+struct Catagory: Codable {
+    let strCategory: [String]
+}
+
 struct Meal: Codable {
     let idMeal: String
     let strMeal: String
@@ -69,6 +77,29 @@ class APIManager {
                     let mealResponse = try decoder.decode(MealResponse.self, from: data)
                     let meals = mealResponse.meals
                     completion(.success(meals))
+                } catch {
+                    completion(.failure(error))
+                }
+            }
+        }
+        
+        task.resume()
+    }
+    static func fetchMealCatagories(completion: @escaping (Result<[Catagory], Error>) -> Void) {
+        let url = URL(string: "https://www.themealdb.com/api/json/v1/1/list.php?c=list")!
+        
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            if let data = data {
+                do {
+                    let decoder = JSONDecoder()
+                    let catagoryResponse = try decoder.decode(CatagoryResponse.self, from: data)
+                    let catagories = catagoryResponse.catagories
+                    completion(.success(catagories))
                 } catch {
                     completion(.failure(error))
                 }
