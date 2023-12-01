@@ -1,15 +1,13 @@
 //
-//  MealDetailView.swift
+//  RecipeListView.swift
 //  recipes
 //
-//  Created by Michael Carey on 11/30/23.
+//  Created by Michael Carey on 11/5/23.
 //
-
-import Foundation
 
 import SwiftUI
 
-struct RecipeListView: View {
+struct RandomListView: View {
     let selectedCategory: String // Pass the selected category as a parameter
     
     @State private var randomMeals: [Meal] = [] // Store the fetched meals here
@@ -32,11 +30,11 @@ struct RecipeListView: View {
             .navigationTitle("Recipe List")
         }
         .onAppear {
-            fetchMeal()
+            fetchRandomMeal()
         }
     }
     
-    private func fetchMeal() {
+    private func fetchRandomMeal() {
         APIManager.fetchRandomMeal { result in
             switch result {
             case .success(let meals):
@@ -48,16 +46,3 @@ struct RecipeListView: View {
     }
 }
 
-struct MealDetailView: View {
-    let meal: Meal
-    
-    var body: some View {
-        VStack {
-            Text("Meal: \(meal.strMeal)")
-            Text("Category: \(meal.strCategory)")
-            Text("Area: \(meal.strArea)")
-            // Add more details as needed
-        }
-        .navigationTitle("Meal Details")
-    }
-}
