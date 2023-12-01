@@ -28,7 +28,7 @@ extension UIColor {
 
 struct ContentView: View {
     @State private var selectedCategory = "All"
-    let recipeCategories = ["All", "Category1", "Category2", "Category3"]
+    @State private var recipeCategories: [String] = ["All"]
     @State private var navigateToRecipeList = false
 
     var body: some View {
@@ -47,10 +47,31 @@ struct ContentView: View {
 
                 NavigationLink("Generate Recipe's", destination: RecipeListView(selectedCategory: selectedCategory))
                     .padding(.all, 6.0)
-                    
                     .cornerRadius(20)
-                    .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                    .foregroundColor(.blue)
                 Spacer()
+            }
+            .onAppear {
+                fetchMealCategories()
+            }
+        }
+    }
+
+    private func fetchMealCategories() {
+        APIManager.fetchMealCatagories { result in
+            switch result {
+            case .success(let categories):
+                // Ensure that strCategory is a [String] and not [Any]
+                let categoryNames = categories.compactMap { $0.strCategory}
+                let allCategories = categoryNames
+
+                // Update the recipeCategories array on the main thread
+                DispatchQueue.main.async {
+                    recipeCategories = allCategories
+                }
+
+            case .failure(let error):
+                print("Error: \(error)")
             }
         }
     }
