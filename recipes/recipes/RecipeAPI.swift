@@ -13,6 +13,8 @@ struct CatagoryMealsResponse: Codable {
 
 struct CatagoryMeals: Codable {
     let strMeal: String
+    let strMealThumb: String
+    let idMeal: String
 }
 
 struct MealResponse: Codable {
@@ -35,6 +37,17 @@ struct Meal: Codable {
     let strInstructions: String
     let strMealThumb: String
     let strYoutube: String
+    
+    init() {
+            // Set default or empty values for each property
+            idMeal = ""
+            strMeal = ""
+            strCategory = ""
+            strArea = ""
+            strInstructions = ""
+            strMealThumb = ""
+            strYoutube = ""
+        }
     
     var ingredients: [String] {
         var result = [String]()
@@ -70,31 +83,8 @@ struct Meal: Codable {
 }
 
 class APIManager {
-    static func fetchRandomMeal(completion: @escaping (Result<[Meal], Error>) -> Void) {
-        let url = URL(string: "https://www.themealdb.com/api/json/v1/1/random.php")!
-        
-        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-            
-            if let data = data {
-                do {
-                    let decoder = JSONDecoder()
-                    let mealResponse = try decoder.decode(MealResponse.self, from: data)
-                    let meals = mealResponse.meals
-                    completion(.success(meals))
-                } catch {
-                    completion(.failure(error))
-                }
-            }
-        }
-        
-        task.resume()
-    }
     static func fetchMealCatagories(completion: @escaping (Result<[Catagory], Error>) -> Void) {
-        let url = URL(string: "https://www.themealdb.com/api/json/v1/1/list.php?c=list")!
+        let url = URL(string: "www.themealdb.com/api/json/v1/1/list.php?c=list")!
         
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let error = error {
@@ -116,9 +106,11 @@ class APIManager {
         
         task.resume()
     }
-    static func fetchCatagoryMeals(completion: @escaping (Result<[CatagoryMeals], Error>) -> Void) {
+    static func fetchCatagoryMeals(categoryType: String, completion: @escaping (Result<[CatagoryMeals], Error>) -> Void) {
         
-        let url = URL(string: "https://www.themealdb.com/api/json/v1/1/filter.php?c=seafood")!
+        let lowercaseCatType = categoryType.lowercased()
+        
+        let url = URL(string: "www.themealdb.com/api/json/v1/1/filter.php?c=\(lowercaseCatType)")!
         
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let error = error {
@@ -132,6 +124,29 @@ class APIManager {
                     let catagorymealsResponse = try decoder.decode(CatagoryMealsResponse.self, from: data)
                     let catagorymeals = catagorymealsResponse.meals
                     completion(.success(catagorymeals))
+                } catch {
+                    completion(.failure(error))
+                }
+            }
+        }
+        
+        task.resume()
+    }
+    static func fetchMealDetails(id: String, completion: @escaping (Result<[Meal], Error>) -> Void) {
+        let url = URL(string: "www.themealdb.com/api/json/v1/1/lookup.php?i=\(id)")!
+        
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            if let data = data {
+                do {
+                    let decoder = JSONDecoder()
+                    let mealResponse = try decoder.decode(MealResponse.self, from: data)
+                    let meals = mealResponse.meals
+                    completion(.success(meals))
                 } catch {
                     completion(.failure(error))
                 }
