@@ -27,7 +27,7 @@ extension UIColor {
 
 
 struct ContentView: View {
-    @State private var selectedCategory: String = "All"
+    @State private var selectedCategory: String = "Beef"
     @State private var recipeCategories: [String] = ["All"]
     @State private var navigateToRecipeList = false
 

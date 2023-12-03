@@ -84,7 +84,7 @@ struct Meal: Codable {
 
 class APIManager {
     static func fetchMealCatagories(completion: @escaping (Result<[Catagory], Error>) -> Void) {
-        let url = URL(string: "www.themealdb.com/api/json/v1/1/list.php?c=list")!
+        let url = URL(string: "https://www.themealdb.com/api/json/v1/1/list.php?c=list")!
         
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let error = error {
@@ -110,7 +110,7 @@ class APIManager {
         
         let lowercaseCatType = categoryType.lowercased()
         
-        let url = URL(string: "www.themealdb.com/api/json/v1/1/filter.php?c=\(lowercaseCatType)")!
+        let url = URL(string: "https://www.themealdb.com/api/json/v1/1/filter.php?c=\(lowercaseCatType)")!
         
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let error = error {
@@ -133,26 +133,31 @@ class APIManager {
         task.resume()
     }
     static func fetchMealDetails(id: String, completion: @escaping (Result<[Meal], Error>) -> Void) {
-        let url = URL(string: "www.themealdb.com/api/json/v1/1/lookup.php?i=\(id)")!
-        
+        let url = URL(string: "https://www.themealdb.com/api/json/v1/1/lookup.php?i=\(id)")!
+
+        print(url)
+
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let error = error {
+                print("Error fetching meal details:", error)
                 completion(.failure(error))
                 return
             }
-            
+
             if let data = data {
                 do {
                     let decoder = JSONDecoder()
                     let mealResponse = try decoder.decode(MealResponse.self, from: data)
                     let meals = mealResponse.meals
+                    print(meals)
                     completion(.success(meals))
                 } catch {
+                    print("Error decoding meal details:", error)
                     completion(.failure(error))
                 }
             }
         }
-        
+
         task.resume()
     }
 }
