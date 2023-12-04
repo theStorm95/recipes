@@ -37,49 +37,56 @@ struct Meal: Codable {
     let strInstructions: String
     let strMealThumb: String
     let strYoutube: String
+    let strIngredient1: String
+    let strIngredient2: String
+    let strIngredient3: String
+    let strIngredient4: String
+    let strIngredient5: String
+    let strIngredient6: String
+    let strIngredient7: String
+    let strIngredient8: String
+    let strIngredient9: String
+    let strIngredient10: String
+    let strIngredient11: String
+    let strIngredient12: String
+    let strIngredient13: String
+    let strIngredient14: String
+    let strIngredient15: String
+    let strIngredient16: String
+    let strIngredient17: String
+    let strIngredient18: String
+    let strIngredient19: String
+    let strIngredient20: String
+    let strMeasure1: String
+    let strMeasure2: String
+    let strMeasure3: String
+    let strMeasure4: String
+    let strMeasure5: String
+    let strMeasure6: String
+    let strMeasure7: String
+    let strMeasure8: String
+    let strMeasure9: String
+    let strMeasure10: String
+    let strMeasure11: String
+    let strMeasure12: String
+    let strMeasure13: String
+    let strMeasure14: String
+    let strMeasure15: String
+    let strMeasure16: String
+    let strMeasure17: String
+    let strMeasure18: String
+    let strMeasure19: String
+    let strMeasure20: String
     
-    init() {
-            // Set default or empty values for each property
-            idMeal = ""
-            strMeal = ""
-            strCategory = ""
-            strArea = ""
-            strInstructions = ""
-            strMealThumb = ""
-            strYoutube = ""
-        }
-    
-    var ingredients: [String] {
-        var result = [String]()
-        for i in 1...20 {
-            let key = "strIngredient\(i)"
-            if let ingredient = getValue(forKey: key) {
-                result.append(ingredient)
-            }
-        }
-        return result
-    }
-
-    var measures: [String] {
-        var result = [String]()
-        for i in 1...20 {
-            let key = "strMeasure\(i)"
-            if let measure = getValue(forKey: key) {
-                result.append(measure)
-            }
-        }
-        return result
-    }
-
     private func getValue(forKey key: String) -> String? {
-        let mirror = Mirror(reflecting: self)
-        for child in mirror.children {
-            if let label = child.label, label == key, let value = child.value as? String, !value.isEmpty {
-                return value
+            let mirror = Mirror(reflecting: self)
+            for child in mirror.children {
+                if let label = child.label, label == key, let value = child.value as? String, !value.isEmpty {
+                    return value
+                }
             }
+            return nil
         }
-        return nil
-    }
 }
 
 class APIManager {
@@ -134,8 +141,6 @@ class APIManager {
     }
     static func fetchMealDetails(id: String, completion: @escaping (Result<[Meal], Error>) -> Void) {
         let url = URL(string: "https://www.themealdb.com/api/json/v1/1/lookup.php?i=\(id)")!
-
-        print(url)
 
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let error = error {

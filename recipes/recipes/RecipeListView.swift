@@ -6,7 +6,6 @@
 //
 
 import Foundation
-
 import SwiftUI
 
 struct RecipeListView: View {
@@ -19,7 +18,13 @@ struct RecipeListView: View {
             NavigationStack {
                 List(categoryMeals, id: \.idMeal) { meal in
                     NavigationLink(destination: MealDetailView(id: meal.idMeal)) {
-                        Text(meal.strMeal)
+                        HStack {
+                            // Display the image using URLImage
+                            AsyncImage(url: URL(string: meal.strMealThumb)) { image in image.resizable() } placeholder: { Color.red }
+                                .frame(width: 128, height: 128)
+                                .clipShape(RoundedRectangle(cornerRadius: 25))
+                            Text(meal.strMeal)
+                        }
                     }
                 }
                 .navigationTitle("Recipe List")
@@ -34,40 +39,6 @@ struct RecipeListView: View {
             switch result {
             case .success(let response):
                 categoryMeals = response
-            case .failure(let error):
-                print("Error: \(error)")
-            }
-        }
-    }
-}
-
-struct MealDetailView: View {
-    @State private var mealToDisplay: [Meal] = [] // Use @State to store the fetched meal details
-    let id: String // Use the type of your meal item from the list
-    
-    var body: some View {
-        VStack {
-            // Display meal details using mealToDisplay
-            if !mealToDisplay.isEmpty {
-                Text("Meal: \(mealToDisplay[0].strMeal)")
-                Text("Category: \(mealToDisplay[0].strCategory)")
-                Text("Area: \(mealToDisplay[0].strArea)")
-                // Add more details as needed
-            } else {
-                Text("Loading...") // Show loading message while fetching meal details
-            }
-        }
-        .navigationTitle("Meal Details")
-        .onAppear {
-            fetchMeal(id: id)
-        }
-    }
-    
-    private func fetchMeal(id: String) {
-        APIManager.fetchMealDetails(id: id) { result in
-            switch result {
-            case .success(let meals):
-                mealToDisplay = meals
             case .failure(let error):
                 print("Error: \(error)")
             }
