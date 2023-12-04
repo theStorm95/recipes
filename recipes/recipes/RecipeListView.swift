@@ -6,41 +6,39 @@
 //
 
 import Foundation
-
 import SwiftUI
 
 struct RecipeListView: View {
     let selectedCategory: String // Pass the selected category as a parameter
     
-    @State private var randomMeals: [Meal] = [] // Store the fetched meals here
     @State private var isShowingDetails = false
-    @State private var selectedMeal: Meal?
+    @State private var categoryMeals: [CatagoryMeals] = []
 
     var body: some View {
-        NavigationStack {
-            List(randomMeals, id: \.idMeal) { meal in
-                NavigationLink {
-                    MealDetailView(meal: meal)
-                } label: {
-                    Text(meal.strMeal)
-                        .onTapGesture {
-                            selectedMeal = meal
-                            isShowingDetails.toggle()
+            NavigationStack {
+                List(categoryMeals, id: \.idMeal) { meal in
+                    NavigationLink(destination: MealDetailView(id: meal.idMeal)) {
+                        HStack {
+                            // Display the image using URLImage
+                            AsyncImage(url: URL(string: meal.strMealThumb)) { image in image.resizable() } placeholder: { Color.red }
+                                .frame(width: 128, height: 128)
+                                .clipShape(RoundedRectangle(cornerRadius: 25))
+                            Text(meal.strMeal)
                         }
+                    }
                 }
+                .navigationTitle("Recipe List")
             }
-            .navigationTitle("Recipe List")
+            .onAppear {
+                fetchCategoryMeals()
+            }
         }
-        .onAppear {
-            fetchMeal()
-        }
-    }
     
-    private func fetchMeal() {
-        APIManager.fetchRandomMeal { result in
+    private func fetchCategoryMeals() {
+        APIManager.fetchCatagoryMeals(categoryType: selectedCategory) { result in
             switch result {
-            case .success(let meals):
-                randomMeals = meals
+            case .success(let response):
+                categoryMeals = response
             case .failure(let error):
                 print("Error: \(error)")
             }
@@ -48,16 +46,3 @@ struct RecipeListView: View {
     }
 }
 
-struct MealDetailView: View {
-    let meal: Meal
-    
-    var body: some View {
-        VStack {
-            Text("Meal: \(meal.strMeal)")
-            Text("Category: \(meal.strCategory)")
-            Text("Area: \(meal.strArea)")
-            // Add more details as needed
-        }
-        .navigationTitle("Meal Details")
-    }
-}
