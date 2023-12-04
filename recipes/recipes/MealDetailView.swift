@@ -16,25 +16,24 @@ struct MealDetailView: View {
         VStack {
             // Display meal details using mealToDisplay
             if !mealToDisplay.isEmpty {
-                Text("Meal: \(mealToDisplay[0].strMeal)")
-                Text("Category: \(mealToDisplay[0].strCategory)")
-                Text("Area: \(mealToDisplay[0].strArea)")
-                // Add more details as needed
-                Text("Ingredients:")
-                ForEach(1...20, id: \.self) { index in
-                                    let ingredientKey = "strIngredient\(index)"
-                                    let measureKey = "strMeasure\(index)"
-
-                                    let ingredient = mealToDisplay.getValue(forKey: ingredientKey)
-                                    let measure = mealToDisplay.getValue(forKey: measureKey)
-
-                                    // Only add non-empty ingredients and measures
-                                    if let ingredient = ingredient, !ingredient.isEmpty {
-                                        Text("\(ingredient) - \(measure ?? "")")
-                                    }
-                                }
-                Text("Instructions: \(mealToDisplay[0].strInstructions)")
-                } else {
+                List{
+                    Text("Meal: \(mealToDisplay[0].strMeal)")
+                    Text("Category: \(mealToDisplay[0].strCategory)")
+                    Text("Area: \(mealToDisplay[0].strArea)")
+                    
+                    // Display ingredients and measures
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Ingredients:")
+                            .font(.headline)
+                        
+                        ForEach(mealToDisplay[0].ingredientMeasureArray, id: \.self) { ingredientMeasure in
+                            Text(ingredientMeasure)
+                        }
+                    }
+                    
+                    Text("Instructions: \(mealToDisplay[0].strInstructions)")
+                }
+            } else {
                 Text("Loading...") // Show loading message while fetching meal details
             }
         }

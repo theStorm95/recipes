@@ -78,15 +78,70 @@ struct Meal: Codable {
     let strMeasure19: String
     let strMeasure20: String
     
-    private func getValue(forKey key: String) -> String? {
-            let mirror = Mirror(reflecting: self)
-            for child in mirror.children {
-                if let label = child.label, label == key, let value = child.value as? String, !value.isEmpty {
-                    return value
-                }
-            }
-            return nil
+    var ingredientMeasureArray: [String] {
+        var result: [String] = []
+        if strIngredient1 != "" {
+            result.append("\(strIngredient1) - \(strMeasure1)")
         }
+        if !strIngredient2.isEmpty {
+            result.append("\(strIngredient2) - \(strMeasure2)")
+        }
+        if !strIngredient3.isEmpty {
+            result.append("\(strIngredient3) - \(strMeasure3)")
+        }
+        if !strIngredient4.isEmpty {
+            result.append("\(strIngredient4) - \(strMeasure4)")
+        }
+        if !strIngredient5.isEmpty {
+            result.append("\(strIngredient5) - \(strMeasure5)")
+        }
+        if !strIngredient6.isEmpty {
+            result.append("\(strIngredient6) - \(strMeasure6)")
+        }
+        if !strIngredient7.isEmpty {
+            result.append("\(strIngredient7) - \(strMeasure7)")
+        }
+        if !strIngredient8.isEmpty {
+            result.append("\(strIngredient8) - \(strMeasure8)")
+        }
+        if !strIngredient9.isEmpty {
+            result.append("\(strIngredient9) - \(strMeasure9)")
+        }
+        if !strIngredient10.isEmpty {
+            result.append("\(strIngredient10) - \(strMeasure10)")
+        }
+        if !strIngredient11.isEmpty {
+            result.append("\(strIngredient11) - \(strMeasure11)")
+        }
+        if !strIngredient12.isEmpty {
+            result.append("\(strIngredient12) - \(strMeasure12)")
+        }
+        if !strIngredient13.isEmpty {
+            result.append("\(strIngredient13) - \(strMeasure13)")
+        }
+        if !strIngredient14.isEmpty {
+            result.append("\(strIngredient14) - \(strMeasure14)")
+        }
+        if !strIngredient15.isEmpty {
+            result.append("\(strIngredient15) - \(strMeasure15)")
+        }
+        if !strIngredient16.isEmpty {
+            result.append("\(strIngredient16) - \(strMeasure16)")
+        }
+        if !strIngredient17.isEmpty {
+            result.append("\(strIngredient17) - \(strMeasure17)")
+        }
+        if !strIngredient18.isEmpty {
+            result.append("\(strIngredient18) - \(strMeasure18)")
+        }
+        if !strIngredient19.isEmpty {
+            result.append("\(strIngredient19) - \(strMeasure19)")
+        }
+        if !strIngredient20.isEmpty {
+            result.append("\(strIngredient20) - \(strMeasure20)")
+        }
+        return result
+    }
 }
 
 class APIManager {
