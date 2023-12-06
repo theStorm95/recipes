@@ -16,12 +16,11 @@ struct AddToCartSheet: View {
     @Binding var ingredient: String
     @Binding var isPresented: Bool
     @State private var quantity: Int = 1
-    @Binding var shoppingCart: [String]
+    @EnvironmentObject var cartManager: ShoppingCartManager
 
-    init(ingredient: Binding<String>, isPresented: Binding<Bool>, shoppingCart: Binding<[String]>) {
+    init(ingredient: Binding<String>, isPresented: Binding<Bool>) {
         self._ingredient = ingredient
         self._isPresented = isPresented
-        self._shoppingCart = shoppingCart
     }
 
     var body: some View {
@@ -35,8 +34,7 @@ struct AddToCartSheet: View {
 
                 Section {
                     Button(action: {
-                        shoppingCart.append("\(ingredient): \(quantity)")
-                        print(shoppingCart)
+                        cartManager.shoppingCart.append("\(ingredient): \(quantity)")
                     }) {
                         Text("Add to Shopping Cart")
                     }
@@ -51,14 +49,14 @@ struct AddToCartSheet: View {
 }
 
 struct ShoppingCartView: View {
-    @Binding var shoppingCart: [String]
+    @EnvironmentObject var cartManager: ShoppingCartManager
 
     var body: some View {
         VStack {
             Text("Shopping Cart")
                 .font(.title)
 
-            List(shoppingCart, id: \.self) { item in
+            List(cartManager.shoppingCart, id: \.self) { item in
                 Text(item)
             }
         }

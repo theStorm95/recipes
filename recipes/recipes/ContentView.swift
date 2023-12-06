@@ -55,6 +55,7 @@ struct ContentView: View {
             .onAppear {
                 fetchMealCategories()
             }
+            .navigationBarItems(trailing: cartButton)
         }
     }
 
@@ -74,6 +75,12 @@ struct ContentView: View {
             case .failure(let error):
                 print("Error: \(error)")
             }
+        }
+    }
+    
+    var cartButton: some View {
+        NavigationLink(destination: ShoppingCartView()) {
+            Image(systemName: "cart")
         }
     }
 }
