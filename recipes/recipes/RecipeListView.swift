@@ -13,6 +13,7 @@ struct RecipeListView: View {
     
     @State private var isShowingDetails = false
     @State private var categoryMeals: [CatagoryMeals] = []
+    
 
     var body: some View {
             NavigationStack {
@@ -28,6 +29,7 @@ struct RecipeListView: View {
                     }
                 }
                 .navigationTitle("Recipe List")
+                .navigationBarItems(trailing: cartButton)
             }
             .onAppear {
                 fetchCategoryMeals()

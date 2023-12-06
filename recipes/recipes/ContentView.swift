@@ -30,6 +30,7 @@ struct ContentView: View {
     @State private var selectedCategory: String = "Beef"
     @State private var recipeCategories: [String] = ["All"]
     @State private var navigateToRecipeList = false
+    
 
     var body: some View {
         NavigationStack {
@@ -42,7 +43,7 @@ struct ContentView: View {
                         Text(category)
                     }
                 }
-                .pickerStyle(InlinePickerStyle())
+                .pickerStyle(MenuPickerStyle())
                 .padding()
 
                 NavigationLink("Generate Recipe's", destination: RecipeListView(selectedCategory: selectedCategory))
