@@ -37,26 +37,26 @@ struct Meal: Codable {
     let strInstructions: String
     let strMealThumb: String
     let strYoutube: String
-    let strIngredient1: String
-    let strIngredient2: String
-    let strIngredient3: String
-    let strIngredient4: String
-    let strIngredient5: String
-    let strIngredient6: String
-    let strIngredient7: String
-    let strIngredient8: String
-    let strIngredient9: String
-    let strIngredient10: String
-    let strIngredient11: String
-    let strIngredient12: String
-    let strIngredient13: String
-    let strIngredient14: String
-    let strIngredient15: String
-    let strIngredient16: String
-    let strIngredient17: String
-    let strIngredient18: String
-    let strIngredient19: String
-    let strIngredient20: String
+    let strIngredient1: String?
+    let strIngredient2: String?
+    let strIngredient3: String?
+    let strIngredient4: String?
+    let strIngredient5: String?
+    let strIngredient6: String?
+    let strIngredient7: String?
+    let strIngredient8: String?
+    let strIngredient9: String?
+    let strIngredient10: String?
+    let strIngredient11: String?
+    let strIngredient12: String?
+    let strIngredient13: String?
+    let strIngredient14: String?
+    let strIngredient15: String?
+    let strIngredient16: String?
+    let strIngredient17: String?
+    let strIngredient18: String?
+    let strIngredient19: String?
+    let strIngredient20: String?
     let strMeasure1: String
     let strMeasure2: String
     let strMeasure3: String
@@ -80,65 +80,65 @@ struct Meal: Codable {
     
     var ingredientMeasureArray: [String] {
         var result: [String] = []
-        if strIngredient1 != "" {
-            result.append("\(strIngredient1) - \(strMeasure1)")
+        if let unwrappedIngredient1 = strIngredient1, !unwrappedIngredient1.isEmpty {
+            result.append("\(unwrappedIngredient1) - \(strMeasure1)")
         }
-        if !strIngredient2.isEmpty {
-            result.append("\(strIngredient2) - \(strMeasure2)")
+        if let unwrappedIngredient2 = strIngredient2, !unwrappedIngredient2.isEmpty {
+            result.append("\(unwrappedIngredient2) - \(strMeasure2)")
         }
-        if !strIngredient3.isEmpty {
-            result.append("\(strIngredient3) - \(strMeasure3)")
+        if let unwrappedIngredient3 = strIngredient3, !unwrappedIngredient3.isEmpty {
+            result.append("\(unwrappedIngredient3) - \(strMeasure3)")
         }
-        if !strIngredient4.isEmpty {
-            result.append("\(strIngredient4) - \(strMeasure4)")
+        if let unwrappedIngredient4 = strIngredient4, !unwrappedIngredient4.isEmpty {
+            result.append("\(unwrappedIngredient4) - \(strMeasure4)")
         }
-        if !strIngredient5.isEmpty {
-            result.append("\(strIngredient5) - \(strMeasure5)")
+        if let unwrappedIngredient5 = strIngredient5, !unwrappedIngredient5.isEmpty {
+            result.append("\(unwrappedIngredient5) - \(strMeasure5)")
         }
-        if !strIngredient6.isEmpty {
-            result.append("\(strIngredient6) - \(strMeasure6)")
+        if let unwrappedIngredient6 = strIngredient6, !unwrappedIngredient6.isEmpty {
+            result.append("\(unwrappedIngredient6) - \(strMeasure6)")
         }
-        if !strIngredient7.isEmpty {
-            result.append("\(strIngredient7) - \(strMeasure7)")
+        if let unwrappedIngredient7 = strIngredient7, !unwrappedIngredient7.isEmpty {
+            result.append("\(unwrappedIngredient7) - \(strMeasure7)")
         }
-        if !strIngredient8.isEmpty {
-            result.append("\(strIngredient8) - \(strMeasure8)")
+        if let unwrappedIngredient8 = strIngredient8, !unwrappedIngredient8.isEmpty {
+            result.append("\(unwrappedIngredient8) - \(strMeasure8)")
         }
-        if !strIngredient9.isEmpty {
-            result.append("\(strIngredient9) - \(strMeasure9)")
+        if let unwrappedIngredient9 = strIngredient9, !unwrappedIngredient9.isEmpty {
+            result.append("\(unwrappedIngredient9) - \(strMeasure9)")
         }
-        if !strIngredient10.isEmpty {
-            result.append("\(strIngredient10) - \(strMeasure10)")
+        if let unwrappedIngredient10 = strIngredient10, !unwrappedIngredient10.isEmpty {
+            result.append("\(unwrappedIngredient10) - \(strMeasure10)")
         }
-        if !strIngredient11.isEmpty {
-            result.append("\(strIngredient11) - \(strMeasure11)")
+        if let unwrappedIngredient11 = strIngredient11, !unwrappedIngredient11.isEmpty {
+            result.append("\(unwrappedIngredient11) - \(strMeasure11)")
         }
-        if !strIngredient12.isEmpty {
-            result.append("\(strIngredient12) - \(strMeasure12)")
+        if let unwrappedIngredient12 = strIngredient12, !unwrappedIngredient12.isEmpty {
+            result.append("\(unwrappedIngredient12) - \(strMeasure12)")
         }
-        if !strIngredient13.isEmpty {
-            result.append("\(strIngredient13) - \(strMeasure13)")
+        if let unwrappedIngredient13 = strIngredient13, !unwrappedIngredient13.isEmpty {
+            result.append("\(unwrappedIngredient13) - \(strMeasure13)")
         }
-        if !strIngredient14.isEmpty {
-            result.append("\(strIngredient14) - \(strMeasure14)")
+        if let unwrappedIngredient14 = strIngredient14, !unwrappedIngredient14.isEmpty {
+            result.append("\(unwrappedIngredient14) - \(strMeasure14)")
         }
-        if !strIngredient15.isEmpty {
-            result.append("\(strIngredient15) - \(strMeasure15)")
+        if let unwrappedIngredient15 = strIngredient15, !unwrappedIngredient15.isEmpty {
+            result.append("\(unwrappedIngredient15) - \(strMeasure15)")
         }
-        if !strIngredient16.isEmpty {
-            result.append("\(strIngredient16) - \(strMeasure16)")
+        if let unwrappedIngredient16 = strIngredient16, !unwrappedIngredient16.isEmpty {
+            result.append("\(unwrappedIngredient16) - \(strMeasure16)")
         }
-        if !strIngredient17.isEmpty {
-            result.append("\(strIngredient17) - \(strMeasure17)")
+        if let unwrappedIngredient17 = strIngredient17, !unwrappedIngredient17.isEmpty {
+            result.append("\(unwrappedIngredient17) - \(strMeasure17)")
         }
-        if !strIngredient18.isEmpty {
-            result.append("\(strIngredient18) - \(strMeasure18)")
+        if let unwrappedIngredient18 = strIngredient18, !unwrappedIngredient18.isEmpty {
+            result.append("\(unwrappedIngredient18) - \(strMeasure18)")
         }
-        if !strIngredient19.isEmpty {
-            result.append("\(strIngredient19) - \(strMeasure19)")
+        if let unwrappedIngredient19 = strIngredient19, !unwrappedIngredient19.isEmpty {
+            result.append("\(unwrappedIngredient19) - \(strMeasure19)")
         }
-        if !strIngredient20.isEmpty {
-            result.append("\(strIngredient20) - \(strMeasure20)")
+        if let unwrappedIngredient20 = strIngredient20, !unwrappedIngredient20.isEmpty {
+            result.append("\(unwrappedIngredient20) - \(strMeasure20)")
         }
         return result
     }
