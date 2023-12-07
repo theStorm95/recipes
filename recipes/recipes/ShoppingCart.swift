@@ -10,6 +10,20 @@ import SwiftUI
 
 class ShoppingCartManager: ObservableObject {
     @Published var shoppingCart: [String] = []
+    
+    init() {
+        loadShoppingCart()
+    }
+    
+    func saveShoppingCart() {
+        UserDefaults.standard.set(shoppingCart, forKey: "shoppingCart")
+        }
+
+    func loadShoppingCart() {
+        if let savedCart = UserDefaults.standard.array(forKey: "shoppingCart") as? [String] {
+            shoppingCart = savedCart
+        }
+    }
 }
 
 struct AddToCartSheet: View {
@@ -35,6 +49,8 @@ struct AddToCartSheet: View {
                 Section {
                     Button(action: {
                         cartManager.shoppingCart.append("\(ingredient): \(quantity)")
+                        cartManager.saveShoppingCart()
+                        isPresented.toggle()
                     }) {
                         Text("Add to Shopping Cart")
                     }
@@ -56,9 +72,26 @@ struct ShoppingCartView: View {
             Text("Shopping Cart")
                 .font(.title)
 
-            List(cartManager.shoppingCart, id: \.self) { item in
-                Text(item)
+            List {
+                ForEach(cartManager.shoppingCart, id: \.self) { item in
+                    Section{
+                        Text(item)
+                    }
+                }
+                .onDelete { indexSet in
+                    cartManager.shoppingCart.remove(atOffsets: indexSet)
+                    cartManager.saveShoppingCart() // Save the shopping cart after deletion
+                }
             }
+            Section {
+                Button(action: {
+                    cartManager.shoppingCart = []
+                    cartManager.saveShoppingCart()
+                }) {
+                    Text("Clear Shopping Cart")
+                }
+            }
+            
         }
         .padding()
     }

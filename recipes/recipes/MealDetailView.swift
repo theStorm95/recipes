@@ -20,15 +20,18 @@ struct MealDetailView: View {
             if !mealToDisplay.isEmpty {
                 List{
                     Text("Basic Details")
-                        .font(.headline)
+                        .font(.title)
                     Text("Meal: \(mealToDisplay[0].strMeal)")
                     Text("Category: \(mealToDisplay[0].strCategory)")
                     Text("Region: \(mealToDisplay[0].strArea)")
                     Section {
                         // Display ingredients and measures
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Ingredients:")
-                                .font(.headline)
+                            Text("Ingredients")
+                                .font(.title)
+                                .multilineTextAlignment(.center)
+
+                            Divider()
                             
                             ForEach(mealToDisplay[0].ingredientMeasureArray, id: \.self) { ingredientMeasure in
                                 HStack {
@@ -45,8 +48,10 @@ struct MealDetailView: View {
                             }
                         }
                     }
+                    Text("Instructions")
+                        .font(.title)
                     
-                    Text("Instructions: \(mealToDisplay[0].strInstructions)")
+                    Text("\(mealToDisplay[0].strInstructions)")
                 }
             } else {
                 Text("Loading...") // Show loading message while fetching meal details
