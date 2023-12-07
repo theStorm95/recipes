@@ -11,7 +11,6 @@ import SwiftUI
 struct MealDetailView: View {
     let id: String // Use the type of your meal item from the list
     @State private var mealToDisplay: [Meal] = [] // Use @State to store the fetched meal details
-    @EnvironmentObject var cartManager: ShoppingCartManager  // Create an instance of the manager
     @State private var isAddingToCart = false
     @State private var selectedIngredient = ""
     
@@ -59,7 +58,7 @@ struct MealDetailView: View {
             fetchMeal(id: id)
         }
         .sheet(isPresented: $isAddingToCart) {
-            AddToCartSheet(ingredient: $selectedIngredient, isPresented: $isAddingToCart, shoppingCart: $cartManager.shoppingCart)
+            AddToCartSheet(ingredient: $selectedIngredient, isPresented: $isAddingToCart)
         }
     }
     
@@ -75,7 +74,7 @@ struct MealDetailView: View {
     }
     
     var cartButton: some View {
-        NavigationLink(destination: ShoppingCartView(shoppingCart: $cartManager.shoppingCart)) {
+        NavigationLink(destination: ShoppingCartView()) {
             Image(systemName: "cart")
         }
     }

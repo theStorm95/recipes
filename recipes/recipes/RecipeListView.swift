@@ -46,5 +46,11 @@ struct RecipeListView: View {
             }
         }
     }
+    
+    var cartButton: some View {
+        NavigationLink(destination: ShoppingCartView()) {
+            Image(systemName: "cart")
+        }
+    }
 }
 
