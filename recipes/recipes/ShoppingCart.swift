@@ -81,6 +81,7 @@ struct ShoppingCartView: View {
                     cartManager.saveShoppingCart() // Save the shopping cart after deletion
                 }
             }
+            .listStyle(PlainListStyle())
             Section {
                 Button(action: {
                     cartManager.shoppingCart = []
