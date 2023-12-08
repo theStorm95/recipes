@@ -20,14 +20,16 @@ struct MealDetailView: View {
         VStack {
             // Display meal details using mealToDisplay
             if !mealToDisplay.isEmpty {
-                // Display YouTube video
-                if let youtubeURL = URL(string: mealToDisplay[0].strYoutube),
-                    UIApplication.shared.canOpenURL(youtubeURL) {
-                        WebView(urlString: mealToDisplay[0].strYoutube)
-                            .frame(height: 400)
-                            .padding(.bottom, 8)
-                    }
                 List{
+                    // Display YouTube video
+                    Section {
+                        if let youtubeURL = URL(string: mealToDisplay[0].strYoutube),
+                           UIApplication.shared.canOpenURL(youtubeURL) {
+                            WebView(urlString: mealToDisplay[0].strYoutube)
+                                .frame(height: 400)
+                                .padding(.bottom, 8)
+                        }
+                    }
                     Text("Basic Details")
                         .font(.title)
                     Text("Meal: \(mealToDisplay[0].strMeal)")
