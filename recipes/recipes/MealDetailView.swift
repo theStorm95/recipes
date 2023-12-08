@@ -13,12 +13,23 @@ struct MealDetailView: View {
     @State private var mealToDisplay: [Meal] = [] // Use @State to store the fetched meal details
     @State private var isAddingToCart = false
     @State private var selectedIngredient = ""
+    @EnvironmentObject var cartManager: ShoppingCartManager
+    @State private var showConfirmationAlert = false
     
     var body: some View {
         VStack {
             // Display meal details using mealToDisplay
             if !mealToDisplay.isEmpty {
                 List{
+                    // Display YouTube video
+                    Section {
+                        if let youtubeURL = URL(string: mealToDisplay[0].strYoutube),
+                           UIApplication.shared.canOpenURL(youtubeURL) {
+                            WebView(urlString: mealToDisplay[0].strYoutube)
+                                .frame(height: 400)
+                                .padding(.bottom, 8)
+                        }
+                    }
                     Text("Basic Details")
                         .font(.title)
                     Text("Meal: \(mealToDisplay[0].strMeal)")
@@ -32,7 +43,7 @@ struct MealDetailView: View {
                                 .multilineTextAlignment(.center)
 
                             Divider()
-                            
+
                             ForEach(mealToDisplay[0].ingredientMeasureArray, id: \.self) { ingredientMeasure in
                                 HStack {
                                     Text(ingredientMeasure)
@@ -46,7 +57,27 @@ struct MealDetailView: View {
                                     .buttonStyle(BorderlessButtonStyle())
                                 }
                             }
+                    }
+                        Button(action: {
+                            showConfirmationAlert = true
+                        }) {
+                            Text("Add All to Cart")
+                                .padding()
+                                .foregroundColor(.white)
+                                .background(Color.blue)
+                                .cornerRadius(8)
                         }
+                        .padding(.top, 10)
+                    }
+                    .alert(isPresented: $showConfirmationAlert) {
+                        Alert(
+                            title: Text("Confirm"),
+                            message: Text("Are you sure you want to add all ingredients to the cart?"),
+                            primaryButton: .default(Text("Add All")) {
+                                addAllIngredientsToCart()
+                            },
+                            secondaryButton: .cancel(Text("Cancel"))
+                        )
                     }
                     Text("Instructions")
                         .font(.title)
@@ -82,5 +113,12 @@ struct MealDetailView: View {
         NavigationLink(destination: ShoppingCartView()) {
             Image(systemName: "cart")
         }
+    }
+    
+    private func addAllIngredientsToCart() {
+        for ingredientMeasure in mealToDisplay[0].ingredientMeasureArray {
+            cartManager.shoppingCart.append("\(ingredientMeasure): 1")
+        }
+        cartManager.saveShoppingCart()
     }
 }
