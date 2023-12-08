@@ -22,11 +22,14 @@ struct MealResponse: Codable {
 }
 
 struct CatagoryResponse: Codable {
-    let meals: [Catagory]
+    let categories: [Catagory]
 }
 
 struct Catagory: Codable {
+    let idCategory: String
     let strCategory: String
+    let strCategoryThumb: String
+    let strCategoryDescription: String
 }
 
 struct Meal: Codable {
@@ -146,8 +149,9 @@ struct Meal: Codable {
 
 class APIManager {
     static func fetchMealCatagories(completion: @escaping (Result<[Catagory], Error>) -> Void) {
-        let url = URL(string: "https://www.themealdb.com/api/json/v1/1/list.php?c=list")!
-        
+        let url = URL(string: "https://www.themealdb.com/api/json/v1/1/categories.php")!
+        print(url)
+            
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let error = error {
                 completion(.failure(error))
@@ -158,16 +162,16 @@ class APIManager {
                 do {
                     let decoder = JSONDecoder()
                     let catagoryResponse = try decoder.decode(CatagoryResponse.self, from: data)
-                    let catagories = catagoryResponse.meals
-                    completion(.success(catagories))
+                    let catagory = catagoryResponse.categories
+                    completion(.success(catagory))
                 } catch {
                     completion(.failure(error))
                 }
             }
         }
-        
         task.resume()
     }
+    
     static func fetchCatagoryMeals(categoryType: String, completion: @escaping (Result<[CatagoryMeals], Error>) -> Void) {
         
         let lowercaseCatType = categoryType.lowercased()

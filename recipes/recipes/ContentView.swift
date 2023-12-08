@@ -28,53 +28,62 @@ extension UIColor {
 
 struct ContentView: View {
     @State private var selectedCategory: String = "Beef"
-    @State private var recipeCategories: [String] = ["All"]
+    @State private var recipeCategories: [Catagory] = []
     @State private var navigateToRecipeList = false
     
     
 
     var body: some View {
         NavigationStack {
-            VStack {
-                Text("Recipe Generator").font(.largeTitle).bold()
-                Spacer()
-                Text("Choose Category")
-                Picker("Select a category", selection: $selectedCategory) {
-                    ForEach(recipeCategories, id: \.self) { category in
-                        Text(category)
-                    }
+                        VStack {
+                            Text("Recipe Generator").font(.largeTitle).bold()
+                            List {
+                                Text("Choose Category")
+                                ForEach(recipeCategories, id: \.idCategory) { category in
+                                    VStack(alignment: .leading) {
+                                        NavigationLink(category.strCategory, destination: RecipeListView(selectedCategory: category.strCategory))
+                                    }
+                                    .padding(10)
+                                    .background(
+                                                                AsyncImage(url: URL(string: category.strCategoryThumb)) { phase in
+                                                                    switch phase {
+                                                                    case .empty:
+                                                                        // Placeholder view while loading
+                                                                        Color.gray
+                                                                    case .success(let image):
+                                                                        // Successfully loaded image
+                                                                        image
+                                                                            .resizable()
+                                                                            .scaledToFill()
+                                                                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                                                            .clipped()
+                                                                    case .failure(_):
+                                                                        // Placeholder view on failure
+                                                                        Color.gray
+                                                                    @unknown default:
+                                                                        // Placeholder view on unknown state
+                                                                        Color.gray
+                                                                    }
+                                                                }
+                                                            )
+                                }
+                                .padding()
+                            }
+                        }
+                        .onAppear {
+                            fetchMealCategories()
+                        }
+                        .navigationBarItems(trailing: cartButton)
                 }
-                .pickerStyle(MenuPickerStyle())
-                .padding()
-
-                NavigationLink("Generate Recipe's", destination: RecipeListView(selectedCategory: selectedCategory))
-                    .padding(.all, 6.0)
-                    .cornerRadius(20)
-                    .foregroundColor(.blue)
-                Spacer()
-            }
-            .onAppear {
-                fetchMealCategories()
-            }
-            .navigationBarItems(trailing: cartButton)
-        }
     }
-
+                               
     private func fetchMealCategories() {
         APIManager.fetchMealCatagories { result in
             switch result {
-            case .success(let categories):
-                // Ensure that strCategory is a [String] and not [Any]
-                let categoryNames = categories.compactMap { $0.strCategory}
-                let allCategories = categoryNames
-
-                // Update the recipeCategories array on the main thread
-                DispatchQueue.main.async {
-                    recipeCategories = allCategories
-                }
-
-            case .failure(let error):
-                print("Error: \(error)")
+                case .success(let categories):
+                    recipeCategories = categories
+                case .failure(let error):
+                    print("Error fetching meal categories:", error)
             }
         }
     }
