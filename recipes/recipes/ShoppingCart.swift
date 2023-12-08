@@ -74,9 +74,7 @@ struct ShoppingCartView: View {
 
             List {
                 ForEach(cartManager.shoppingCart, id: \.self) { item in
-                    Section{
                         Text(item)
-                    }
                 }
                 .onDelete { indexSet in
                     cartManager.shoppingCart.remove(atOffsets: indexSet)
