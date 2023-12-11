@@ -29,7 +29,7 @@ class ShoppingCartManager: ObservableObject {
 struct AddToCartSheet: View {
     @Binding var ingredient: String
     @Binding var isPresented: Bool
-    @State private var quantity: Int = 1
+    @State var quantity: Int = 1
     @EnvironmentObject var cartManager: ShoppingCartManager
 
     init(ingredient: Binding<String>, isPresented: Binding<Bool>) {
@@ -88,6 +88,10 @@ struct ShoppingCartView: View {
                     cartManager.saveShoppingCart()
                 }) {
                     Text("Clear Shopping Cart")
+                        .padding()
+                        .foregroundColor(.white)
+                        .background(Color.red)
+                        .cornerRadius(8)
                 }
             }
             

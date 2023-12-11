@@ -150,7 +150,6 @@ struct Meal: Codable {
 class APIManager {
     static func fetchMealCatagories(completion: @escaping (Result<[Catagory], Error>) -> Void) {
         let url = URL(string: "https://www.themealdb.com/api/json/v1/1/categories.php")!
-        print(url)
             
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let error = error {
@@ -213,7 +212,6 @@ class APIManager {
                     let decoder = JSONDecoder()
                     let mealResponse = try decoder.decode(MealResponse.self, from: data)
                     let meals = mealResponse.meals
-                    print(meals)
                     completion(.success(meals))
                 } catch {
                     print("Error decoding meal details:", error)
