@@ -31,70 +31,83 @@ struct ContentView: View {
     @State private var recipeCategories: [Catagory] = []
     @State private var navigateToRecipeList = false
     
-    
+    init() {
+            let coloredAppearance = UINavigationBarAppearance()
+            coloredAppearance.backgroundColor = UIColor.systemGray6
+            coloredAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+            UINavigationBar.appearance().standardAppearance = coloredAppearance
+            UINavigationBar.appearance().scrollEdgeAppearance = coloredAppearance
+            coloredAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        }
 
     var body: some View {
         NavigationStack {
-                        VStack {
-                            Text("Recipe Generator").font(.largeTitle).bold()
-                            List {
-                                Text("Choose Category")
-                                ForEach(recipeCategories, id: \.idCategory) { category in
-                                    VStack(alignment: .leading) {
-                                        NavigationLink(category.strCategory, destination: RecipeListView(selectedCategory: category.strCategory))
+            ScrollView {
+            VStack {
+                Text("Recipe Generator")
+                    .font(.largeTitle)
+                    .bold()
+                    .padding(20)
+                Text("Choose Category")
+                
+                LazyVGrid(columns: [GridItem(.flexible(), spacing: 16), GridItem(.flexible(), spacing: 16)], spacing: 16) {
+                    ForEach(recipeCategories, id: \.idCategory) { category in
+                        NavigationLink(destination: RecipeListView(selectedCategory: category.strCategory)) {
+                            VStack(alignment: .leading) {
+                                AsyncImage(url: URL(string: category.strCategoryThumb)) { phase in
+                                    switch phase {
+                                    case .empty:
+                                        Color.gray
+                                    case .success(let image):
+                                        image
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                            .clipped()
+                                    case .failure(_):
+                                        Color.gray
+                                    @unknown default:
+                                        Color.gray
                                     }
-                                    .padding(10)
-                                    .background(
-                                                                AsyncImage(url: URL(string: category.strCategoryThumb)) { phase in
-                                                                    switch phase {
-                                                                    case .empty:
-                                                                        // Placeholder view while loading
-                                                                        Color.gray
-                                                                    case .success(let image):
-                                                                        // Successfully loaded image
-                                                                        image
-                                                                            .resizable()
-                                                                            .scaledToFill()
-                                                                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                                                            .clipped()
-                                                                    case .failure(_):
-                                                                        // Placeholder view on failure
-                                                                        Color.gray
-                                                                    @unknown default:
-                                                                        // Placeholder view on unknown state
-                                                                        Color.gray
-                                                                    }
-                                                                }
-                                                            )
                                 }
-                                .padding()
+                                HStack {
+                                    Spacer()
+                                    Text(category.strCategory)
+                                        .foregroundColor(.primary)
+                                    Spacer()
+                                }
                             }
+                            .padding(30)
                         }
-                        .onAppear {
-                            fetchMealCategories()
-                        }
-                        .navigationBarItems(trailing: cartButton)
+                    }
                 }
+            }
+        }
+            .onAppear {
+                fetchMealCategories()
+            }
+            .navigationBarItems(trailing: cartButton)
+            
+        }
     }
-                               
+
     private func fetchMealCategories() {
         APIManager.fetchMealCatagories { result in
             switch result {
-                case .success(let categories):
-                    recipeCategories = categories
-                case .failure(let error):
-                    print("Error fetching meal categories:", error)
+            case .success(let categories):
+                recipeCategories = categories
+            case .failure(let error):
+                print("Error fetching meal categories:", error)
             }
         }
     }
-    
+
     var cartButton: some View {
         NavigationLink(destination: ShoppingCartView()) {
             Image(systemName: "cart")
         }
     }
 }
-
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
